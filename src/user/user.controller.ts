@@ -1,5 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service.js';
+// `import type` is required: this type appears in a decorated signature while
+// `isolatedModules` + `emitDecoratorMetadata` are on.
+import type { CreateUserInput } from './user.service.js';
 
 @Controller('users')
 export class UserController {
@@ -11,7 +14,7 @@ export class UserController {
   }
 
   @Post()
-  create(@Body() body: { name: string; email: string }) {
+  create(@Body() body: CreateUserInput) {
     return this.userService.create(body);
   }
 }

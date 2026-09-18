@@ -22,7 +22,15 @@ export class TrpcRouter {
         }),
 
       create: publicProcedure
-        .input(z.object({ name: z.string().min(1), email: z.email() }))
+        .input(
+          z.object({
+            name: z.string().min(1),
+            email: z.email(),
+            gender: z.enum(['male', 'female', 'other']),
+            profession: z.string().min(1),
+            address: z.string().min(1),
+          }),
+        )
         .mutation(({ input }) => this.userService.create(input)),
     }),
   });

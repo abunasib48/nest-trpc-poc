@@ -1,7 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user.entity.js';
+import { Gender, User } from './user.entity.js';
+
+export interface CreateUserInput {
+  name: string;
+  email: string;
+  gender: Gender;
+  profession: string;
+  address: string;
+}
 
 /**
  * The single business/data layer. Both the HTTP controller and the tRPC
@@ -23,7 +31,7 @@ export class UserService {
     return this.users.findOneBy({ id });
   }
 
-  create(data: { name: string; email: string }): Promise<User> {
+  create(data: CreateUserInput): Promise<User> {
     return this.users.save(this.users.create(data));
   }
 }
