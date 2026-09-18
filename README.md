@@ -21,6 +21,13 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+## POC: HTTP + tRPC sharing one TypeORM/PostgreSQL service layer
+
+This repo is a proof of concept — one NestJS server exposing `GET /users/:id`
+(REST) **and** `trpc/user.getById`, both backed by the same `UserService`,
+TypeORM and PostgreSQL. See **[TRPC_POC.md](TRPC_POC.md)** for architecture,
+setup and testing instructions.
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
