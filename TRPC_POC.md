@@ -29,8 +29,8 @@ database implementation for tRPC.
 | File | Role |
 | --- | --- |
 | `src/user/user.entity.ts` | `User` entity — `id`, `name`, `email` |
-| `src/user/user.service.ts` | **Shared** service: `getById(id)`, `create()` |
-| `src/user/user.controller.ts` | HTTP: `GET /users/:id`, `POST /users` |
+| `src/user/user.service.ts` | **Shared** service: `getAll()`, `getById(id)`, `create()` |
+| `src/user/user.controller.ts` | HTTP: `GET /users`, `POST /users` |
 | `src/user/user.module.ts` | Wires entity + service + controller, exports `UserService` |
 | `src/trpc/trpc.base.ts` | `initTRPC` instance (`router`, `publicProcedure`) |
 | `src/trpc/trpc.router.ts` | tRPC router — injects `UserService`; exports `AppRouter` type |
@@ -97,11 +97,11 @@ curl -X POST http://localhost:3000/users \
 ## HTTP request
 
 ```bash
-curl http://localhost:3000/users/1
+curl http://localhost:3000/users
 ```
 
 ```json
-{ "id": 1, "name": "Ada Lovelace", "email": "ada@example.com" }
+[{ "id": 1, "name": "Ada Lovelace", "email": "ada@example.com" }]
 ```
 
 ## tRPC request
@@ -155,7 +155,7 @@ await client.user.nonExistent.query({});       // Property 'nonExistent' does no
    client with zero build step.
 
 Verified: a row inserted via `POST /users`, a row inserted via raw SQL, and the
-same rows read back through both `GET /users/:id` and `trpc/user.getById`.
+same rows listed by `GET /users` and read individually by `trpc/user.getById`.
 
 ## HTTP vs tRPC — the differences that matter
 
@@ -163,8 +163,8 @@ same rows read back through both `GET /users/:id` and `trpc/user.getById`.
 | --- | --- | --- |
 | **Contract** | Convention + docs (OpenAPI, hand-written types) | The router's TypeScript type, inferred automatically |
 | **Client** | Any HTTP client, any language | Best with a TypeScript client; other languages must hand-roll the JSON-RPC calls |
-| **Routing** | URL paths + verbs (`GET /users/:id`) | Procedure paths (`user.getById`), always `GET` for queries / `POST` for mutations |
-| **Validation** | Nest pipes (`ParseIntPipe`, DTOs) | zod schema on `.input()`, which is also the source of the client's types |
+| **Routing** | URL paths + verbs (`GET /users`) | Procedure paths (`user.getById`), always `GET` for queries / `POST` for mutations |
+| **Validation** | Nest pipes and DTOs | zod schema on `.input()`, which is also the source of the client's types |
 | **Errors** | Nest exceptions → HTTP status (`404 Not Found`) | `TRPCError` → JSON-RPC error body **and** an HTTP status (`NOT_FOUND` → 404) |
 | **Nest features** | Full: guards, interceptors, pipes, filters, Swagger | Not applied — requests bypass the Nest router; use tRPC middleware instead |
 | **Batching** | One request per call | `httpBatchLink` batches several procedure calls into one request |

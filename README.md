@@ -23,7 +23,7 @@
 
 ## POC: HTTP + tRPC sharing one TypeORM/PostgreSQL service layer
 
-This repo is a proof of concept — one NestJS server exposing `GET /users/:id`
+This repo is a proof of concept — one NestJS server exposing `GET /users`
 (REST) **and** `trpc/user.getById`, both backed by the same `UserService`,
 TypeORM and PostgreSQL. See **[TRPC_POC.md](TRPC_POC.md)** for architecture,
 setup and testing instructions.

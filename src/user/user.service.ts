@@ -15,6 +15,10 @@ export class UserService {
     private readonly users: Repository<User>,
   ) {}
 
+  getAll(): Promise<User[]> {
+    return this.users.find({ order: { id: 'ASC' } });
+  }
+
   getById(id: number): Promise<User | null> {
     return this.users.findOneBy({ id });
   }
